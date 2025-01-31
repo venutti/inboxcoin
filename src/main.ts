@@ -15,7 +15,7 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, documentFactory);
 
-  const logger = new Logger();
+  const logger = new Logger('NestApplication');
 
   const port = process.env.PORT ?? 3000;
 

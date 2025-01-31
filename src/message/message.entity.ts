@@ -1,9 +1,11 @@
+import { User } from 'src/user/user.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -11,11 +13,11 @@ export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  fromAccount: string;
+  @ManyToOne(() => User, (user) => user.messagesSent)
+  fromAccount: User;
 
-  @Column()
-  toAccount: string;
+  @ManyToOne(() => User, (user) => user.messagesReceived)
+  toAccount: User;
 
   @Column()
   escrowAccount: string;
