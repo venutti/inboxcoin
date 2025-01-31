@@ -22,14 +22,27 @@ export class UserService {
     try {
       await this.stellarService.loadAccount(publicKey);
     } catch (error) {
-      this.logger.error(
-        `Error loading account ${publicKey} in the Stellar network`,
-        error,
-      );
+      this.logger.error(`Account ${publicKey} not found in Stellar`, error);
     }
 
-    // TODO: load or create when stellar account exists
+    const user = await this.usersRepository.findOne({
+      where: { publicKey },
+      relations: ['messagesSent', 'messagesReceived'],
+    });
 
-    return this.usersRepository.findOne({ where: { publicKey } });
+    if (user) {
+      return user;
+    }
+
+    this.logger.log(`User ${publicKey} not found, creating...`);
+
+    const newUser = new User();
+    newUser.publicKey = publicKey;
+    const savedUser = await this.usersRepository.save(newUser);
+    return {
+      ...savedUser,
+      messagesSent: [],
+      messagesReceived: [],
+    };
   }
 }

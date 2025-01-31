@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Message } from '../message/message.entity';
 
@@ -10,9 +9,9 @@ export class User {
   @Column()
   publicKey: string;
 
-  @OneToMany((type) => Message, (message) => message.fromAccount)
+  @OneToMany(() => Message, (message) => message.fromAccount)
   messagesSent: Message[];
 
-  @OneToMany((type) => Message, (message) => message.toAccount)
+  @OneToMany(() => Message, (message) => message.toAccount)
   messagesReceived: Message[];
 }
