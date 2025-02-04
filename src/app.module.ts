@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { StellarModule } from './stellar/stellar.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { StellarModule } from './stellar/stellar.module';
     DatabaseModule,
     UserModule,
     StellarModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
