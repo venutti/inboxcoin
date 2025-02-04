@@ -15,15 +15,13 @@ export class UserService {
   ) {}
 
   findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.usersRepository.find({
+      relations: ['messagesSent', 'messagesReceived'],
+    });
   }
 
-  async loadOrCreate(publicKey: string): Promise<User | null> {
-    try {
-      await this.stellarService.loadAccount(publicKey);
-    } catch (error) {
-      this.logger.error(`Account ${publicKey} not found in Stellar`, error);
-    }
+  async loadOrCreate(publicKey: string): Promise<User> {
+    await this.stellarService.loadAccount(publicKey);
 
     const user = await this.usersRepository.findOne({
       where: { publicKey },
@@ -34,7 +32,7 @@ export class UserService {
       return user;
     }
 
-    this.logger.log(`User ${publicKey} not found, creating...`);
+    this.logger.debug(`User ${publicKey} not found in repository, creating...`);
 
     const newUser = new User();
     newUser.publicKey = publicKey;
