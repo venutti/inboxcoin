@@ -6,7 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { StellarModule } from './stellar/stellar.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from './logging.interceptor';
+import { RequestLogInterceptor } from './requestLog.interceptor';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { LoggingInterceptor } from './logging.interceptor';
   controllers: [AppController],
   providers: [AppService,  {
     provide: APP_INTERCEPTOR,
-    useClass: LoggingInterceptor,
+    useClass: RequestLogInterceptor,
   },],
 })
 export class AppModule {}
