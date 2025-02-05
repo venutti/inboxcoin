@@ -6,7 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { StellarModule } from './stellar/stellar.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { RequestLogInterceptor } from './requestLog.interceptor';
+import { RequestLogInterceptor } from './common/interceptors/requestLog.interceptor';
 
 @Module({
   imports: [

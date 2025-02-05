@@ -8,13 +8,14 @@ export class RequestLogInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const { method, url } = context.switchToHttp().getRequest();
-    this.logger.log(`[${method}] ${url}`);
+    const requestToLog = `[${method}] ${url}`
+    this.logger.log(requestToLog);
     const start = Date.now();
     return next.handle().pipe(
       tap(() => {
         const end = Date.now();
         const response = context.switchToHttp().getResponse();
-        const message = `Request ${method} ${url} took ${end - start}ms`;
+        const message = `${requestToLog} took ${end - start}ms`;
         if (response.statusCode >= 400) {
           this.logger.error(message);
         } else {
