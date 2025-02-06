@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { StellarModule } from './stellar/stellar.module';
+import { MessageModule } from './message/message.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { RequestLogInterceptor } from './common/interceptors/requestLog.interceptor';
 
@@ -14,6 +15,7 @@ import { RequestLogInterceptor } from './common/interceptors/requestLog.intercep
     DatabaseModule,
     UserModule,
     StellarModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService,  {

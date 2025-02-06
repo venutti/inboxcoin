@@ -9,5 +9,6 @@ import { StellarModule } from 'src/stellar/stellar.module';
   imports: [TypeOrmModule.forFeature([User]), StellarModule],
   providers: [UserService],
   controllers: [UserController],
+  exports: [UserService],
 })
 export class UserModule {}

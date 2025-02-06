@@ -28,10 +28,19 @@ export class Message {
   @Column()
   amount: string;
 
-  @Column()
-  transactionEnvelopeXdr: string;
+  @Column({ length: 2000 })
+  createEscrowTransactionXdr: string;
 
-  @Column()
+  @Column({ nullable: true, length: 2000 })
+  cancelPaymentTransactionXdr: string;
+
+  @Column({ nullable: true, length: 2000 })
+  receivePaymentTransactionXdr: string;
+
+  @Column({ default: false })
+  isTransactionSubmissionPending: boolean;
+
+  @Column({ enum: ['PENDING', 'RECEIVED', 'CANCELED'] })
   status: string;
 
   @CreateDateColumn()
