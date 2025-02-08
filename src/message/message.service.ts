@@ -2,8 +2,10 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StellarService } from 'src/stellar/stellar.service';
 import { Message } from './message.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
+import { MessageListedMapper } from './mapper/message-listed.mapper';
+import { MessageListedDto } from './dto/message-listed.dto';
 
 @Injectable()
 export class MessageService {
@@ -14,6 +16,7 @@ export class MessageService {
     private readonly messageRepository: Repository<Message>,
     private readonly stellarService: StellarService,
     private readonly userService: UserService,
+    private readonly messageListedMapper: MessageListedMapper
   ) {}
 
   private async findMessageById(id: number): Promise<Message> {
@@ -29,6 +32,28 @@ export class MessageService {
     }
 
     return message;
+  }
+
+  
+  async getMessagesByUser(publicKey: string, messageType: 'all' | 'sent' | 'received' = 'all'): Promise<MessageListedDto[]> {
+    const user = await this.userService.loadOrCreate(publicKey);
+
+    let conditions: FindOptionsWhere<Message> | FindOptionsWhere<Message>[] | undefined    = [];
+    if (messageType === 'all' || messageType === 'sent') {
+      conditions.push({ fromAccount: { id: user.id } });
+    }
+    if (messageType === 'all' || messageType === 'received') {
+      conditions.push({ toAccount: { id: user.id } });
+    }
+
+    const messages = await this.messageRepository.find({
+      where: conditions,
+      order: { createdAt: 'DESC' },
+      select: ['id', 'amount', 'status', 'createdAt'],
+      relations: ['fromAccount', 'toAccount']
+    })
+    
+    return messages.map((message) => this.messageListedMapper.fromMessageToMessageListed(message));
   }
 
   async createPendingMessage(
