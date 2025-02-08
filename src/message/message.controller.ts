@@ -1,4 +1,4 @@
-import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreatePendingMessageDto } from './dto/create-pending-message.dto';
 import { SubmitMessageTransactionDto } from './dto/submit-message-transaction.dto';
@@ -6,6 +6,15 @@ import { SubmitMessageTransactionDto } from './dto/submit-message-transaction.dt
 @Controller('message')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
+
+    @Get('/:publicKey')
+    async getMessagesByUser(
+      @Param('publicKey') publicKey: string,
+      @Param('messageType') messageType?: 'sent' | 'received',
+    ) {
+      return await this.messageService.getMessagesByUser(publicKey, messageType);
+    }
+
 
   @Post()
   async createPendingMessage(
