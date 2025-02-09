@@ -11,10 +11,11 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Inboxcoin')
+    .setDescription(
+      'Inboxcoin allows users to receive paid messages, and only claim the payment when they read the message. That way, a new way of managing messages is introduced. The sender can cancel the payment anytime.',
+    )
     .setVersion('1.0')
-    .addTag('cats')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, documentFactory);
