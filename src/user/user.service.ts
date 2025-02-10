@@ -25,7 +25,7 @@ export class UserService {
 
     const user = await this.usersRepository.findOne({
       where: { publicKey },
-      relations: ['messagesSent', 'messagesReceived'],
+      relations: ['messagesSent', 'messagesSent.fromAccount', 'messagesSent.toAccount', 'messagesReceived', 'messagesReceived.fromAccount', 'messagesReceived.toAccount'],
     });
 
     if (user) {
